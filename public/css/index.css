@@ -106,7 +106,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
 }
 
 .card__no-comments{
-  font-size: 25px;
+  font-size: 20px;
   text-align: center;
   margin-bottom: 25px;
 }
@@ -141,14 +141,9 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
   box-shadow: 0 0 3px grey;
 } 
 
-
 textarea.form__input{
   min-height: 60px;
   resize: vertical;
-}
-
-.form__captcha{
-  margin-right: 10px;
 }
 
 .form__button{
@@ -177,3 +172,38 @@ textarea.form__input{
   box-shadow: 0 0 3px red;
 }
 
+[v-cloak]{
+  display: none;
+}
+.checkbox__input{
+  display: none;
+}
+.checkbox__input:checked + .checkbox__label::after{
+  transform: scale(1);
+}
+.checkbox__label{
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+.checkbox__label::before{
+  content: "";
+  flex: 0 0 24px;
+  height: 24px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+.checkbox__label::after{
+  transition: all 0.2s ease 0s;
+  content: "";
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background-color: #99a681;
+  border-radius: 4px;
+  transform: scale(0);
+}

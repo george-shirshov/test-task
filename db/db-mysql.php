@@ -6,54 +6,58 @@
 
   use Config;
 
-  class DbMySql
+class DbMySql
   {
     public function getAllComments(){
-      $connection = mysqli_connect(Config::$host, 
-                                    Config::$user, 
-                                    Config::$password, 
-                                    Config::$database);
+      $connection = $this->openConnection();
 
-      $sqlQuery = "SELECT * FROM `Comments` ORDER BY dateComment DESC";
+      $sqlQuery = "SELECT * FROM `Comments` ORDER BY `date` DESC";
       
       $comments = mysqli_query($connection, $sqlQuery);
       
       mysqli_close($connection);
 
-      return mysqli_fetch_all($comments);
+      return mysqli_fetch_all($comments, MYSQLI_ASSOC);
     }
 
-    public function addComment($userName, $message){
-      $connection = mysqli_connect(Config::$host, 
-                                    Config::$user, 
-                                    Config::$password, 
-                                    Config::$database);
+    public function addComment($userName, $text, $date){
+      $connection = $this->openConnection();
 
       $userName = mysqli_real_escape_string($connection, $userName);
-      $message = mysqli_real_escape_string($connection, $message);
+      $text = mysqli_real_escape_string($connection, $text);
+      $date = mysqli_real_escape_string($connection, $date);
 
-      $sqlQuery = "INSERT INTO `Comments`(`id`, `userName`, `dateComment`, `comment`) 
-                    VALUES (NULL,'$userName', now(),'$message')";
+      $sqlQuery = "INSERT INTO `Comments`(`id`, `userName`, `date`, `text`) 
+                   VALUES (NULL, '$userName', '$date', '$text')";
       
       mysqli_query($connection, $sqlQuery);
-
+      
+      $id = mysqli_insert_id($connection);
+      
       mysqli_close($connection);
+
+      return $id;
     }
 
-    public function deleteComment($id)
-    {
-      $connection = mysqli_connect(Config::$host, 
-                                    Config::$user, 
-                                    Config::$password, 
-                                    Config::$database);
+    public function deleteComment($id){
+      $connection = $this->openConnection();
 
       $id = (int) $id;
 
       $sqlQuery = "DELETE FROM `Comments` WHERE id = $id";
 
-      mysqli_query($connection, $sqlQuery);
+      $result = mysqli_query($connection, $sqlQuery);
 
       mysqli_close($connection);
+
+      return $result;
+    }
+
+    private function openConnection(){
+      return mysqli_connect(Config::$host, 
+                            Config::$user, 
+                            Config::$password, 
+                            Config::$database);
     }
   }
   

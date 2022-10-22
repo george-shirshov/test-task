@@ -3,15 +3,12 @@
 
   use \db\DbMySql;
 
-  $postData = file_get_contents('php://input');
-  $data = json_decode($postData, true);
-
   $db = new DbMySql();
 
-  $result = $db->deleteComment($data['id']);
+  $comments = $db->getAllComments();
 
   $request = array(
-    'result' => $result
+    'comments' => json_encode($comments)
   );
 
   header('Content-Type: application/json; charset=utf-8');
